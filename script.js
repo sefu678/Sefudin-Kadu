@@ -31,8 +31,8 @@ const settings = JSON.parse(localStorage.getItem("settings")) || {
   whatsappUrl: "https://wa.me/918780813692",
 
   // Admin Credentials
-  adminUsername: "admin",
-  adminPassword: "admin123",
+  adminUsername: "kadusefu4@gmail.com",
+  adminPassword: "sajjadkaduu",
 
   // Website Colors
   primaryColor: "#ff6b6b",
