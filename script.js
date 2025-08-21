@@ -21,8 +21,7 @@ const settings = JSON.parse(localStorage.getItem("settings")) || {
   whatsappNumber: "+918780813692",
   email: "sefudinkadu@gmail.com",
   phone: "+91 8780813692",
-  
-  
+
   // Social Media Links
   instagramUrl: "https://instagram.com/aurafashion",
   facebookUrl: "https://facebook.com/aurafashion",
@@ -62,9 +61,8 @@ function initializeApp() {
     document.getElementById("loadingScreen").classList.add("hidden")
   }, 2000)
 
-  // Generate products if not exists
   if (!localStorage.getItem("products")) {
-    products = generateProducts()
+    products = [] // Start with empty products array
     localStorage.setItem("products", JSON.stringify(products))
   } else {
     products = JSON.parse(localStorage.getItem("products"))
@@ -127,91 +125,6 @@ function updateWebsiteContent() {
 
   // Update page title
   document.title = `${settings.storeName} - ${settings.storeTagline}`
-}
-
-// Generate Products
-function generateProducts() {
-  const categories = ["festive", "casual", "party", "wedding", "traditional"]
-  const badges = ["New", "Sale", "Bestseller", "Trending", "Premium", "Hot", "Limited"]
-  const names = [
-    "Royal Silk Kurta Set",
-    "Cotton Casual Kurta",
-    "Designer Party Wear",
-    "Wedding Special Set",
-    "Festive Anarkali Set",
-    "Casual Printed Kurta",
-    "Elegant Party Kurta",
-    "Traditional Set",
-    "Embroidered Silk Kurta",
-    "Floral Print Kurta",
-    "Golden Thread Work",
-    "Mirror Work Kurta",
-    "Chiffon Party Wear",
-    "Georgette Anarkali",
-    "Cotton Straight Kurta",
-    "Palazzo Set",
-    "Sharara Suit",
-    "Gharara Set",
-    "A-Line Kurta",
-    "Asymmetric Kurta",
-  ]
-
-  const descriptions = [
-    "Exquisite craftsmanship meets contemporary design in this stunning piece.",
-    "Perfect blend of comfort and style, crafted with premium quality fabric.",
-    "Handcrafted with attention to detail, featuring intricate embroidery.",
-    "Premium quality fabric with elegant finish, designed for special occasions.",
-    "Traditional artistry with modern appeal, showcasing rich heritage.",
-    "Comfortable fit for all-day wear, made with breathable fabric.",
-    "Stunning embellishments that reflect the beauty of traditional fashion.",
-    "Versatile piece for multiple occasions, from casual to festive.",
-  ]
-
-  const features = [
-    ["Premium Quality Fabric", "Comfortable Fit", "Easy Care", "Durable Construction"],
-    ["Handcrafted Details", "Breathable Material", "Color Fast", "Wrinkle Resistant"],
-    ["Traditional Design", "Modern Cut", "Perfect Finish", "Long Lasting"],
-    ["Elegant Embroidery", "Soft Touch", "Machine Washable", "Fade Resistant"],
-  ]
-
-  const generatedProducts = []
-
-  for (let i = 1; i <= 100; i++) {
-    const basePrice = Math.floor(Math.random() * 8000) + 1000
-    const originalPrice = basePrice + Math.floor(Math.random() * 2000) + 500
-    const category = categories[Math.floor(Math.random() * categories.length)]
-    const nameIndex = Math.floor(Math.random() * names.length)
-
-    // Generate multiple images
-    const imageCount = Math.floor(Math.random() * 4) + 2
-    const images = []
-    for (let j = 0; j < imageCount; j++) {
-      images.push(`https://picsum.photos/400/500?random=${i}${j}`)
-    }
-
-    generatedProducts.push({
-      id: i,
-      name: `${names[nameIndex]} ${i}`,
-      description: descriptions[Math.floor(Math.random() * descriptions.length)],
-      fullDescription: `This beautiful ${category} kurta set represents the perfect fusion of traditional Indian craftsmanship and contemporary fashion. Made with premium quality fabric, it features intricate details and elegant finishing.`,
-      price: basePrice,
-      originalPrice: Math.random() > 0.3 ? originalPrice : null,
-      category: category,
-      sizes: ["S", "M", "L", "XL", "XXL"],
-      badge: Math.random() > 0.4 ? badges[Math.floor(Math.random() * badges.length)] : null,
-      rating: (Math.random() * 2 + 3).toFixed(1),
-      reviews: Math.floor(Math.random() * 200) + 10,
-      image: images[0],
-      images: images,
-      features: features[Math.floor(Math.random() * features.length)],
-      fabric: ["Cotton", "Silk", "Georgette", "Chiffon", "Rayon"][Math.floor(Math.random() * 5)],
-      care: ["Hand wash recommended", "Machine wash cold", "Dry clean only"][Math.floor(Math.random() * 3)],
-      featured: Math.random() > 0.8,
-      dateAdded: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-    })
-  }
-
-  return generatedProducts
 }
 
 // Event Listeners
