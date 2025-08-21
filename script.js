@@ -19,8 +19,9 @@ const settings = JSON.parse(localStorage.getItem("settings")) || {
 
   // Contact Info
   whatsappNumber: "+918780813692",
-  email: "sefudinkadu@gmail.com",
+  email: "hello@aurafashion.com",
   phone: "+91 8780813692",
+  address: "123 Fashion Street, Mumbai, Maharashtra 400001",
 
   // Social Media Links
   instagramUrl: "https://instagram.com/aurafashion",
@@ -30,8 +31,8 @@ const settings = JSON.parse(localStorage.getItem("settings")) || {
   whatsappUrl: "https://wa.me/918780813692",
 
   // Admin Credentials
-  adminUsername: "kadusefu4@gmail.com",
-  adminPassword: "sajjadkaduu",
+  adminUsername: "admin",
+  adminPassword: "admin123",
 
   // Website Colors
   primaryColor: "#ff6b6b",
@@ -61,8 +62,9 @@ function initializeApp() {
     document.getElementById("loadingScreen").classList.add("hidden")
   }, 2000)
 
+  // Generate products if not exists
   if (!localStorage.getItem("products")) {
-    products = [] // Start with empty products array
+    products = generateProducts()
     localStorage.setItem("products", JSON.stringify(products))
   } else {
     products = JSON.parse(localStorage.getItem("products"))
@@ -125,6 +127,91 @@ function updateWebsiteContent() {
 
   // Update page title
   document.title = `${settings.storeName} - ${settings.storeTagline}`
+}
+
+// Generate Products
+function generateProducts() {
+  const categories = ["festive", "casual", "party", "wedding", "traditional"]
+  const badges = ["New", "Sale", "Bestseller", "Trending", "Premium", "Hot", "Limited"]
+  const names = [
+    "Royal Silk Kurta Set",
+    "Cotton Casual Kurta",
+    "Designer Party Wear",
+    "Wedding Special Set",
+    "Festive Anarkali Set",
+    "Casual Printed Kurta",
+    "Elegant Party Kurta",
+    "Traditional Set",
+    "Embroidered Silk Kurta",
+    "Floral Print Kurta",
+    "Golden Thread Work",
+    "Mirror Work Kurta",
+    "Chiffon Party Wear",
+    "Georgette Anarkali",
+    "Cotton Straight Kurta",
+    "Palazzo Set",
+    "Sharara Suit",
+    "Gharara Set",
+    "A-Line Kurta",
+    "Asymmetric Kurta",
+  ]
+
+  const descriptions = [
+    "Exquisite craftsmanship meets contemporary design in this stunning piece.",
+    "Perfect blend of comfort and style, crafted with premium quality fabric.",
+    "Handcrafted with attention to detail, featuring intricate embroidery.",
+    "Premium quality fabric with elegant finish, designed for special occasions.",
+    "Traditional artistry with modern appeal, showcasing rich heritage.",
+    "Comfortable fit for all-day wear, made with breathable fabric.",
+    "Stunning embellishments that reflect the beauty of traditional fashion.",
+    "Versatile piece for multiple occasions, from casual to festive.",
+  ]
+
+  const features = [
+    ["Premium Quality Fabric", "Comfortable Fit", "Easy Care", "Durable Construction"],
+    ["Handcrafted Details", "Breathable Material", "Color Fast", "Wrinkle Resistant"],
+    ["Traditional Design", "Modern Cut", "Perfect Finish", "Long Lasting"],
+    ["Elegant Embroidery", "Soft Touch", "Machine Washable", "Fade Resistant"],
+  ]
+
+  const generatedProducts = []
+
+  for (let i = 1; i <= 100; i++) {
+    const basePrice = Math.floor(Math.random() * 8000) + 1000
+    const originalPrice = basePrice + Math.floor(Math.random() * 2000) + 500
+    const category = categories[Math.floor(Math.random() * categories.length)]
+    const nameIndex = Math.floor(Math.random() * names.length)
+
+    // Generate multiple images
+    const imageCount = Math.floor(Math.random() * 4) + 2
+    const images = []
+    for (let j = 0; j < imageCount; j++) {
+      images.push(`https://picsum.photos/400/500?random=${i}${j}`)
+    }
+
+    generatedProducts.push({
+      id: i,
+      name: `${names[nameIndex]} ${i}`,
+      description: descriptions[Math.floor(Math.random() * descriptions.length)],
+      fullDescription: `This beautiful ${category} kurta set represents the perfect fusion of traditional Indian craftsmanship and contemporary fashion. Made with premium quality fabric, it features intricate details and elegant finishing.`,
+      price: basePrice,
+      originalPrice: Math.random() > 0.3 ? originalPrice : null,
+      category: category,
+      sizes: ["S", "M", "L", "XL", "XXL"],
+      badge: Math.random() > 0.4 ? badges[Math.floor(Math.random() * badges.length)] : null,
+      rating: (Math.random() * 2 + 3).toFixed(1),
+      reviews: Math.floor(Math.random() * 200) + 10,
+      image: images[0],
+      images: images,
+      features: features[Math.floor(Math.random() * features.length)],
+      fabric: ["Cotton", "Silk", "Georgette", "Chiffon", "Rayon"][Math.floor(Math.random() * 5)],
+      care: ["Hand wash recommended", "Machine wash cold", "Dry clean only"][Math.floor(Math.random() * 3)],
+      featured: Math.random() > 0.8,
+      dateAdded: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+    })
+  }
+
+  return generatedProducts
 }
 
 // Event Listeners
@@ -1151,7 +1238,7 @@ function adminLogout() {
 }
 
 function switchAdminTab(tabName) {
-  // Remove active class from all tabs
+  // Simple user menu toggle - can be expanded
   document.querySelectorAll(".admin-tab").forEach((tab) => tab.classList.remove("active"))
   event.target.classList.add("active")
 
@@ -1461,29 +1548,12 @@ function addNewProduct() {
                         </div>
                         <div class="form-group">
                             <label>Product Images</label>
-                            <div style="margin-bottom: 1rem;">
-                                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                                    <h5 style="margin-bottom: 0.5rem; color: #28a745;">✅ Image Upload Options:</h5>
-                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">1. <strong>Upload from device:</strong> Click "Choose Files" below</p>
-                                    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">2. <strong>Use image URL:</strong> Paste direct image links in the text area</p>
-                                    <p style="font-size: 0.8rem; color: #6c757d;">Note: For public websites, image URLs work best (like from Google Drive, Dropbox, or image hosting sites)</p>
-                                </div>
-                            </div>
                             <div class="image-upload-area" onclick="document.getElementById('productImages').click()">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Click to upload images from device</p>
+                                <p>Click to upload images or drag and drop</p>
                                 <small>You can upload multiple images (JPG, PNG, WebP)</small>
                             </div>
                             <input type="file" id="productImages" multiple accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
-                            
-                            <div style="margin-top: 1rem;">
-                                <label>Or paste image URLs (one per line):</label>
-                                <textarea id="imageUrls" rows="4" placeholder="https://example.com/image1.jpg
-https://example.com/image2.jpg
-https://example.com/image3.jpg" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-family: monospace; font-size: 0.9rem;"></textarea>
-                                <small style="color: #6c757d;">Tip: Use image hosting services like ImgBB, Imgur, or Google Drive public links</small>
-                            </div>
-                            
                             <div class="image-preview" id="imagePreview"></div>
                         </div>
                         <div class="form-group">
@@ -1505,7 +1575,7 @@ https://example.com/image3.jpg" style="width: 100%; padding: 0.5rem; border: 2px
     `
 }
 
-// Enhanced Image upload handler for public websites
+// Image upload handler
 function handleImageUpload(input) {
   const files = Array.from(input.files)
   const preview = document.getElementById("imagePreview")
@@ -1539,22 +1609,9 @@ function removeImagePreview(button) {
 function saveNewProduct(event) {
   event.preventDefault()
 
-  // Get uploaded images from file input
+  // Get uploaded images
   const imageElements = document.querySelectorAll("#imagePreview img")
-  const uploadedImages = Array.from(imageElements).map((img) => img.src)
-
-  // Get images from URL textarea
-  const imageUrls = document
-    .getElementById("imageUrls")
-    .value.split("\n")
-    .map((url) => url.trim())
-    .filter((url) => url.length > 0 && (url.startsWith("http://") || url.startsWith("https://")))
-
-  // Combine both sources
-  const allImages = [...uploadedImages, ...imageUrls]
-
-  // Use placeholder if no images provided
-  const finalImages = allImages.length > 0 ? allImages : [`https://picsum.photos/400/500?random=${Date.now()}`]
+  const images = Array.from(imageElements).map((img) => img.src)
 
   const newProduct = {
     id: Math.max(...products.map((p) => p.id)) + 1,
@@ -1573,8 +1630,8 @@ function saveNewProduct(event) {
     badge: document.getElementById("newProductBadge").value || null,
     rating: (Math.random() * 2 + 3).toFixed(1),
     reviews: Math.floor(Math.random() * 200) + 10,
-    image: finalImages[0],
-    images: finalImages,
+    image: images[0] || `https://picsum.photos/300/400?random=${Date.now()}`,
+    images: images.length > 0 ? images : [`https://picsum.photos/300/400?random=${Date.now()}`],
     features: ["Premium Quality Fabric", "Comfortable Fit", "Easy Care", "Durable Construction"],
     fabric: document.getElementById("newProductFabric").value || "Premium Cotton",
     care: "Machine wash cold",
@@ -1585,7 +1642,7 @@ function saveNewProduct(event) {
   products.push(newProduct)
   localStorage.setItem("products", JSON.stringify(products))
 
-  showNotification("Product added successfully! 🎉", "success")
+  showNotification("Product added successfully!", "success")
   switchAdminTab("products")
   displayProducts() // Refresh main product display
 }
@@ -1639,13 +1696,6 @@ function editProduct(productId) {
                         </div>
                         <div class="form-group">
                             <label>Product Images</label>
-                            <div style="margin-bottom: 1rem;">
-                                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                                    <h5 style="margin-bottom: 0.5rem; color: #28a745;">✅ Current Images:</h5>
-                                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">You can remove existing images and add new ones</p>
-                                    <p style="font-size: 0.8rem; color: #6c757d;">For public websites, image URLs work best</p>
-                                </div>
-                            </div>
                             <div class="image-preview" id="imagePreview">
                                 ${
                                   product.images && product.images.length > 0
@@ -1675,17 +1725,10 @@ function editProduct(productId) {
                             </div>
                             <div class="image-upload-area" onclick="document.getElementById('editProductImages').click()" style="margin-top: 1rem;">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Click to upload new images from device</p>
+                                <p>Click to upload new images or drag and drop</p>
                                 <small>You can add more images or replace existing ones</small>
                             </div>
                             <input type="file" id="editProductImages" multiple accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
-                            
-                            <div style="margin-top: 1rem;">
-                                <label>Or add image URLs (one per line):</label>
-                                <textarea id="editImageUrls" rows="4" placeholder="https://example.com/image1.jpg
-https://example.com/image2.jpg" style="width: 100%; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 8px; font-family: monospace; font-size: 0.9rem;"></textarea>
-                                <small style="color: #6c757d;">Add new image URLs here - they will be added to existing images</small>
-                            </div>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
@@ -1712,21 +1755,11 @@ function updateProduct(event, productId) {
   const productIndex = products.findIndex((p) => p.id === productId)
   if (productIndex === -1) return
 
-  // Get current images from preview
+  // Get current and new images - FIXED VERSION
   const imageElements = document.querySelectorAll(".image-preview img")
-  const currentImages = Array.from(imageElements).map((img) => img.src)
+  const allImages = Array.from(imageElements).map((img) => img.src)
 
-  // Get new images from URL textarea
-  const newImageUrls = document
-    .getElementById("editImageUrls")
-    .value.split("\n")
-    .map((url) => url.trim())
-    .filter((url) => url.length > 0 && (url.startsWith("http://") || url.startsWith("https://")))
-
-  // Combine current and new images
-  const allImages = [...currentImages, ...newImageUrls]
-
-  // Keep original images if no images provided
+  // Keep original images if no new images uploaded
   const finalImages = allImages.length > 0 ? allImages : products[productIndex].images
   const finalMainImage = allImages.length > 0 ? allImages[0] : products[productIndex].image
 
@@ -1749,7 +1782,7 @@ function updateProduct(event, productId) {
 
   localStorage.setItem("products", JSON.stringify(products))
 
-  showNotification("Product updated successfully! 🎉", "success")
+  showNotification("Product updated successfully!", "success")
   switchAdminTab("products")
   displayProducts() // Refresh main product display
 }
